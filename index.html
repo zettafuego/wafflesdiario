@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f3efe8" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="description" content="Checklist de Edu: paz mental, una a la vez. Alertas al celu y a la compu. El Edu del pasado te quiere mucho." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Waffle Daily" />
+  <title>Waffle · Daily</title>
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/png" sizes="192x192" href="./assets/icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="./assets/icons/icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./assets/css/app.css" />
+</head>
+<body>
+  <div class="wrap">
+    <div class="install-banner" id="installBanner">
+      <span>Instala Waffle Daily en el teléfono para usarla sin red.</span>
+      <button class="btn primary" type="button" id="installBtn" style="flex:0;padding:8px 12px">Instalar</button>
+    </div>
+
+    <!-- HOY -->
+    <section id="view-today">
+      <header class="hero">
+        <div>
+          <p class="kicker" id="todayLabel">Hoy</p>
+          <h1 id="heroTitle">Checklist de Waffle</h1>
+          <p class="sub" id="heroSub">Eres un crack. Una a la vez. El Edu del pasado te quiere mucho.</p>
+        </div>
+        <div class="waffle-card" id="waffleCard" title="Toca para un ronroneo">
+          <svg class="cat" id="catSvg" viewBox="0 0 160 130" aria-hidden="true"></svg>
+          <div class="mood" id="moodText">Waffle te espera</div>
+        </div>
+      </header>
+
+      <div class="meta-row">
+        <span class="pill gold" id="weekPill" style="cursor:pointer" title="Abrir esta semana">2026-W37</span>
+        <span class="pill" id="netPill"><i class="dot"></i> En línea</span>
+      </div>
+
+      <section class="stats">
+        <div class="stat">
+          <b id="pct">0%</b>
+          <span>cumplido hoy</span>
+          <div class="bar"><i id="barFill"></i></div>
+        </div>
+        <div class="stat"><b id="doneN">0</b><span>hechas</span></div>
+        <div class="stat"><b id="streak">0</b><span>días seguidos</span></div>
+      </section>
+
+      <blockquote class="mantra" id="mantraBanner">
+        Mi paz mental. Dejar todo más ordenado de como lo encontré.
+        <small>Mantras · uwu · también son tareas de hoy</small>
+      </blockquote>
+
+      <section class="focus-card empty" id="focusCard"></section>
+
+      <section class="prio-box" id="prioBox"></section>
+
+      <div class="mood-row" id="moodRow"></div>
+
+      <section class="learn-box" id="learnBox"></section>
+
+      <section class="learn-box" id="dailyBox"></section>
+
+      <p class="hint">
+        Una a la vez, causa. Termina el foco. Vitales primero, luego los pendientes de una vez.
+        Toca a Waffle para un ronroneo. Abre la <strong style="color:var(--gold-2)">carta</strong> cuando necesites que te recuerden que eres un crack.
+      </p>
+
+      <div class="filters" id="filters"></div>
+      <div id="list"></div>
+
+      <div class="note-box">
+        <strong style="color:var(--ink)">Nota del día</strong>
+        <textarea id="dayNote" placeholder="Qué avanzaste de verdad hoy…"></textarea>
+      </div>
+    </section>
+
+    <!-- TABLERO SCRUM -->
+    <section id="view-board" class="hidden">
+      <header class="hero board-hero">
+        <div>
+          <p class="kicker" id="boardKicker">Waffles</p>
+          <h1>Pizarra</h1>
+          <p class="sub">Arrastra una carta. En curso es el foco — una sola a la vez.</p>
+        </div>
+        <div class="waffle-card" id="waffleCardBoard" title="Toca para un ronroneo">
+          <svg class="cat" id="catSvgBoard" viewBox="0 0 160 130" aria-hidden="true"></svg>
+          <div class="mood" id="moodTextBoard">Waffle te espera</div>
+        </div>
+      </header>
+      <div class="meta-row">
+        <span class="pill gold" id="boardWeekPill">Sprint</span>
+        <span class="pill" id="boardNetPill">En línea</span>
+        <button class="btn ghost" type="button" id="fillWafflesBoardBtn" style="padding:6px 12px;font-size:12.5px">Guardar estatus</button>
+      </div>
+      <blockquote class="mantra" id="mantraBannerBoard">Mi paz mental.</blockquote>
+      <div class="filters" id="boardFilters"></div>
+      <div class="board" id="board"></div>
+    </section>
+
+    <!-- 1:1 -->
+    <section id="view-oto" class="hidden">
+      <p class="kicker">One to one · uwu</p>
+      <h1>Presencia</h1>
+      <p class="sub">Waffles y lo personal. Una persona a la vez. No es reunión: es cuidar el vínculo.</p>
+      <div class="filters" id="otoFilters"></div>
+      <div id="otoDue"></div>
+      <div id="otoList"></div>
+      <section class="learn-box" style="margin-top:16px">
+        <h3>Agregar persona</h3>
+        <div class="learn-row">
+          <input id="otoName" placeholder="Nombre" />
+        </div>
+        <div class="row">
+          <select id="otoOrg">
+            <option value="personal">Personal</option>
+            <option value="waffles">Waffles Tech</option>
+          </select>
+          <input id="otoRole" placeholder="Rol / vínculo" />
+        </div>
+        <button class="btn primary" type="button" id="otoAddBtn" style="margin-top:10px">Agregar</button>
+      </section>
+    </section>
+
+    <!-- SPRINT / SEMANA -->
+    <section id="view-week" class="hidden">
+      <p class="kicker">Sprint</p>
+      <h1>Semana por ID</h1>
+      <p class="sub">El sprint es la semana ISO (lunes a domingo). El % usa solo los días que ya pasaron.</p>
+
+      <div class="week-nav">
+        <button class="btn ghost" type="button" id="prevWeek">◀</button>
+        <div class="week-id-card">
+          <b id="weekIdBig">2026-W37</b>
+          <span id="weekRange">—</span>
+        </div>
+        <button class="btn ghost" type="button" id="nextWeek">▶</button>
+      </div>
+
+      <section class="stats">
+        <div class="stat">
+          <b id="weekAvg">0%</b>
+          <span>promedio de la semana</span>
+          <div class="bar"><i id="weekBarFill"></i></div>
+        </div>
+        <div class="stat"><b id="weekHappy">0</b><span>días felices (≥70%)</span></div>
+        <div class="stat"><b id="weekActive">0</b><span>días con avance</span></div>
+      </section>
+
+      <div class="heat" id="heat"></div>
+      <div class="area-list" id="areaBars"></div>
+
+      <div class="note-box">
+        <strong style="color:var(--ink)">Nota de la semana</strong>
+        <textarea id="weekNote" placeholder="Cierre de la semana: qué se movió en WT, Love Song, arte…"></textarea>
+      </div>
+    </section>
+
+    <!-- CARTA / JUEGO -->
+    <section id="view-letter" class="hidden">
+      <p class="kicker">Carta · uwu</p>
+      <h1>Edu del pasado</h1>
+      <p class="sub">Atrapa las cartas. Al final siempre dice la verdad: eres un crack, y te quiere mucho.</p>
+      <div class="letter-stage">
+        <canvas id="letterCanvas" aria-label="Juego de la carta"></canvas>
+        <div id="letterWin" class="letter-win hidden">
+          <p class="kicker">Para Edu de ahora</p>
+          <h2>Eres un crack.</h2>
+          <p class="love">El Edu del pasado te quiere mucho.</p>
+          <p class="letter-body">
+            Paz mental. Una sola cosa. Deja todo más ordenado de como lo encontraste.
+            No tienes que solo. Pide ayuda. Carga el celu. Oler rico. Cuidar amigos.
+            Yo ya sé que puedes. Por eso te lo dejo escrito.
+          </p>
+          <p class="sign">— Edu de antes · uwu</p>
+          <div class="btn-row">
+            <button class="btn primary" type="button" id="letterAgain">Otra vez</button>
+            <button class="btn ghost" type="button" id="letterToToday">Volver a hoy</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HISTORIAL DE IDs -->
+    <section id="view-weeks" class="hidden">
+      <p class="kicker">Historial</p>
+      <h1>IDs semanales</h1>
+      <p class="sub">Toca un ID para abrir esa semana. El porcentaje es el promedio diario de áreas.</p>
+      <div id="weekList"></div>
+    </section>
+  </div>
+
+  <nav class="dock" aria-label="Navegación">
+    <button class="tab on" type="button" data-view="board">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="7" height="16" rx="2"/><rect x="14" y="4" width="7" height="10" rx="2"/></svg>
+      Pizarra
+    </button>
+    <button class="tab" type="button" data-view="today">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M8.5 12.5l2.2 2.2 4.8-5"/></svg>
+      Hoy
+    </button>
+    <button class="tab" type="button" data-view="oto">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M4 19c.4-3 2.6-5 5-5s4.6 2 5 5"/><circle cx="16.5" cy="9" r="2.4"/><path d="M15 19c.3-2.2 1.7-3.6 3.5-3.6"/></svg>
+      1:1
+    </button>
+    <button class="tab" type="button" data-view="letter">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 8l9 6 9-6"/></svg>
+      Carta
+    </button>
+    <button class="tab" type="button" id="moreBtn">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="6" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="18" cy="12" r="1.7"/></svg>
+      Más
+    </button>
+  </nav>
+
+  <dialog id="addDlg">
+    <h2 class="panel-title">Nueva tarea</h2>
+    <label>Título</label>
+    <input id="fTitle" placeholder="Ej. estribillo Love Song" />
+    <div class="row">
+      <div>
+        <label>Área</label>
+        <select id="fCat"></select>
+      </div>
+      <div>
+        <label>Tipo</label>
+        <select id="fType">
+          <option value="daily">Diaria</option>
+          <option value="once">Una vez</option>
+          <option value="monthly">Mensual (día 15)</option>
+        </select>
+      </div>
+    </div>
+    <label>Nota / horario (opcional)</label>
+    <input id="fNote" placeholder="Ej. 19:00 con Bard" />
+    <div style="display:flex;gap:8px;margin-top:16px;justify-content:flex-end">
+      <button class="btn ghost" type="button" id="cancelAdd">Cancelar</button>
+      <button class="btn primary" type="button" id="saveAdd">Guardar</button>
+    </div>
+  </dialog>
+
+  <dialog id="moreDlg">
+    <h2 class="panel-title">Más</h2>
+    <p class="sub" style="margin-bottom:12px">El Excel de Waffles es la base. Celu y PC bajan, mezclan y suben. Sin red, sigue aquí.</p>
+    <p class="t-meta" id="sheetHelp" style="margin-bottom:10px">Todo se guarda en <strong>este Excel</strong>. La pizarra sincroniza al mover cartas. Las diarias se suman cada día. Terminada = Tarea terminada.</p>
+    <label>Excel de Waffles</label>
+    <input id="sheetUrl" readonly />
+    <label>Puerta (Apps Script …/exec)</label>
+    <input id="scriptUrl" readonly />
+    <label>Token (opcional, igual que TOKEN en Code.gs)</label>
+    <input id="scriptToken" placeholder="vacío = sin clave" />
+    <div class="btn-row">
+      <button class="btn primary" type="button" id="syncNowBtn">Sincronizar (bajar + subir)</button>
+      <button class="btn ghost" type="button" id="pingBtn">Probar conexión</button>
+      <button class="btn ghost" type="button" id="openSheetBtn">Abrir Excel</button>
+      <button class="btn ghost" type="button" id="excelBtn">Excel CSV</button>
+      <button class="btn primary" type="button" id="wafflesExcelBtn">Guardar estatus del día</button>
+    </div>
+    <p class="t-meta" id="syncStatus" style="margin-bottom:12px">Sin URL todavía.</p>
+    <button class="btn primary" type="button" id="alertsBtn" style="width:100%;margin-bottom:8px">Activar alertas (celu y PC)</button>
+    <p class="t-meta" id="alertsStatus" style="margin-bottom:12px">Sin alertas todavía. Actívalas para que Waffle te avise.</p>
+    <button class="btn ghost" type="button" id="addBtn" style="width:100%;margin-bottom:8px">+ Tarea</button>
+    <button class="btn ghost" type="button" id="gotoWeek" style="width:100%;margin-bottom:8px">Sprint de esta semana</button>
+    <button class="btn ghost" type="button" id="gotoWeeks" style="width:100%;margin-bottom:8px">IDs semanales</button>
+    <button class="btn primary" type="button" id="icsBtn" style="width:100%;margin-bottom:8px">Descargar .ics del día</button>
+    <button class="btn ghost" type="button" id="gcalBtn" style="width:100%;margin-bottom:8px">Abrir Google Calendar</button>
+    <button class="btn ghost" type="button" id="exportBtn" style="width:100%;margin-bottom:8px">Exportar respaldo JSON</button>
+    <button class="btn ghost" type="button" id="importBtn" style="width:100%;margin-bottom:8px">Importar respaldo</button>
+    <input id="importFile" type="file" accept="application/json,.json" hidden />
+    <button class="btn ghost" type="button" id="resetBtn" style="width:100%;margin-bottom:8px">Desmarcar este día</button>
+    <button class="btn ghost" type="button" id="closeMore" style="width:100%">Cerrar</button>
+  </dialog>
+
+  <div id="waffleMsg" class="waffle-msg hidden" role="dialog" aria-live="polite">
+    <div class="waffle-msg-card">
+      <span class="hearts" id="waffleHearts">♡</span>
+      <img id="waffleMsgImg" class="waffle-face" alt="Waffle" />
+      <div class="bubble" id="waffleMsgText"></div>
+      <div class="purr-waves" id="waffleWaves">rrrr</div>
+      <button class="btn primary" type="button" id="waffleMsgOk" style="margin-top:14px;width:100%">Listo</button>
+    </div>
+  </div>
+
+  <dialog id="otoDlg">
+    <h2 class="panel-title" id="otoDlgTitle">One to one</h2>
+    <p class="sub" id="otoDlgSub" style="margin-bottom:10px"></p>
+    <label>Cómo está (vibe)</label>
+    <div class="mood-row" id="otoVibeRow"></div>
+    <label>Nota personal</label>
+    <textarea id="otoNotes" placeholder="Cómo está, qué necesita, lo uwu…"></textarea>
+    <label>Qué hablamos hoy</label>
+    <input id="otoTalk" placeholder="Una frase. Presencia, no acta." />
+    <label>Próximo 1:1</label>
+    <div class="row">
+      <input id="otoNext" type="date" />
+      <input id="otoCadence" type="number" min="1" max="60" placeholder="cada N días" />
+    </div>
+    <label>Pendiente con esta persona</label>
+    <div class="learn-row">
+      <input id="otoItem" placeholder="Un ítem, no diez" />
+      <button class="btn ghost" type="button" id="otoItemAdd">Añadir</button>
+    </div>
+    <div id="otoItems"></div>
+    <div id="otoLog"></div>
+    <div style="display:flex;gap:8px;margin-top:16px;justify-content:flex-end">
+      <button class="btn ghost" type="button" id="closeOto">Cerrar</button>
+      <button class="btn primary" type="button" id="saveOtoTalk">Registrar charla</button>
+    </div>
+  </dialog>
+
+  <dialog id="focusDlg">
+    <h2 style="font-family:Fraunces,serif;margin:0 0 8px">Encuentra el foco</h2>
+    <p class="sub" style="margin-bottom:12px">Una sola cosa. Lo demás espera. Paz mental.</p>
+    <div id="focusChoices"></div>
+    <button class="btn ghost" type="button" id="closeFocus" style="width:100%;margin-top:8px">Cerrar</button>
+  </dialog>
+
+  <script src="./assets/js/data.js"></script>
+  <script src="./assets/js/store.js"></script>
+  <script src="./assets/js/sync.js"></script>
+  <script src="./assets/js/alerts.js"></script>
+  <script src="./assets/js/game.js"></script>
+  <script src="./assets/js/app.js"></script>
+</body>
+</html>
